@@ -1,0 +1,3 @@
+todoist_token = ""
+gitlab_token = ""
+database_file = "todosync.db"
