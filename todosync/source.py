@@ -18,13 +18,17 @@ def retrieve_gitlab_issues(token: str) -> list[dict]:
                 'title': issue.title,
                 'description': issue.description,
                 'due_date': issue.due_date,
-                'status': 'todo',  # todo use labels to determinate status (doing == in_progress)
+                'status': get_gitlab_status(issue),
                 'url': get_gitlab_url(issue)
             })
 
     return tasks
 
 
-def get_gitlab_url(issue):
+def get_gitlab_url(issue) -> str:
     slug = issue.references['full'].replace(issue.references['short'], '')
     return "https://gitlab.com/{}".format(slug)
+
+
+def get_gitlab_status(issue) -> str:
+    return 'in_progress' if 'Doing' in issue.labels else 'todo'
