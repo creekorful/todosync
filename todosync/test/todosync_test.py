@@ -42,13 +42,15 @@ class MyTestCase(unittest.TestCase):
             get_config(config, 'https://gitlab.com/creekorful/test')
 
     def test_get_config_missing_todo(self):
-        config = {'sources': {
-            "https://gitlab.com/creekorful/test": {
-                'url': 'https://gitlab.com/creekorful/test',
-                'default': 42,
-                'in_progress': 2424,
-            }
-        }}
+        config = {
+            'config': {},
+            'sources': {
+                "https://gitlab.com/creekorful/test": {
+                    'url': 'https://gitlab.com/creekorful/test',
+                    'default': 42,
+                    'in_progress': 2424,
+                }
+            }}
 
         labels, todo, in_progress = get_config(config, 'https://gitlab.com/creekorful/test')
 
@@ -57,13 +59,15 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(2424, in_progress)
 
     def test_get_config_missing_in_progress(self):
-        config = {'sources': {
-            "https://gitlab.com/creekorful/test": {
-                'url': 'https://gitlab.com/creekorful/test',
-                'default': 42,
-                'todo': 2424,
-            }
-        }}
+        config = {
+            'config': {},
+            'sources': {
+                "https://gitlab.com/creekorful/test": {
+                    'url': 'https://gitlab.com/creekorful/test',
+                    'default': 42,
+                    'todo': 2424,
+                }
+            }}
 
         labels, todo, in_progress = get_config(config, 'https://gitlab.com/creekorful/test')
 
@@ -73,39 +77,66 @@ class MyTestCase(unittest.TestCase):
 
     def test_get_config_no_default_missing_todo(self):
         with self.assertRaises(Exception):
-            config = {'sources': {
-                "https://gitlab.com/creekorful/test": {
-                    'url': 'https://gitlab.com/creekorful/test',
-                    'in_progress': 2424,
-                }
-            }}
+            config = {
+                'config': {},
+                'sources': {
+                    "https://gitlab.com/creekorful/test": {
+                        'url': 'https://gitlab.com/creekorful/test',
+                        'in_progress': 2424,
+                    }
+                }}
 
             get_config(config, 'https://gitlab.com/creekorful/test')
 
     def test_get_config_no_default_missing_in_progress(self):
         with self.assertRaises(Exception):
-            config = {'sources': {
-                "https://gitlab.com/creekorful/test": {
-                    'url': 'https://gitlab.com/creekorful/test',
-                    'todo': 2424,
-                }
-            }}
+            config = {
+                'config': {},
+                'sources': {
+                    "https://gitlab.com/creekorful/test": {
+                        'url': 'https://gitlab.com/creekorful/test',
+                        'todo': 2424,
+                    }
+                }}
 
             get_config(config, 'https://gitlab.com/creekorful/test')
 
     def test_get_config(self):
-        config = {'sources': {
-            "https://gitlab.com/creekorful/test": {
-                'url': 'https://gitlab.com/creekorful/test',
-                'default': 42,
-                'todo': 2121,
-                'in_progress': 2424,
-            }
-        }}
+        config = {
+            'config': {},
+            'sources': {
+                "https://gitlab.com/creekorful/test": {
+                    'url': 'https://gitlab.com/creekorful/test',
+                    'default': 42,
+                    'todo': 2121,
+                    'in_progress': 2424,
+                }
+            }}
 
         labels, todo, in_progress = get_config(config, 'https://gitlab.com/creekorful/test')
 
         self.assertEqual([], labels)
+        self.assertEqual(2121, todo)
+        self.assertEqual(2424, in_progress)
+
+    def test_get_config_with_default_labels(self):
+        config = {
+            'config': {
+                'default_labels': [12]
+            },
+            'sources': {
+                "https://gitlab.com/creekorful/test": {
+                    'url': 'https://gitlab.com/creekorful/test',
+                    'labels': [6, 24],
+                    'default': 42,
+                    'todo': 2121,
+                    'in_progress': 2424,
+                }
+            }}
+
+        labels, todo, in_progress = get_config(config, 'https://gitlab.com/creekorful/test')
+
+        self.assertEqual([6, 24, 12], labels)
         self.assertEqual(2121, todo)
         self.assertEqual(2424, in_progress)
 

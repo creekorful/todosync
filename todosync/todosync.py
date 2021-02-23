@@ -68,6 +68,10 @@ def get_config(config: dict, url: str) -> (list[int], int, int):
     if 'labels' in src:
         labels = src['labels']
 
+    # merge with default labels
+    if 'default_labels' in config['config']:
+        labels.extend(config['config']['default_labels'])
+
     if 'todo' in src:
         todo = src['todo']
     else:
@@ -133,8 +137,6 @@ def synchronize():
         else:
             section_id = todo
 
-        # todo apply labels
-
         todoist_api.items.move(task['todoist_item_id'], section_id=section_id)
 
     # then create the new tasks
@@ -148,9 +150,7 @@ def synchronize():
         else:
             section_id = todo
 
-        # todo apply labels
-
-        item = todoist_api.items.add(task['title'], section_id=section_id)
+        item = todoist_api.items.add(task['title'], section_id=section_id, labels=labels)
         task['todoist_item_id'] = item['id']
 
     todoist_api.commit()
