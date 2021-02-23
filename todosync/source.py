@@ -14,11 +14,17 @@ def retrieve_gitlab_issues(token: str) -> list[dict]:
         issues = gl.issues.list(state='opened')
         for issue in issues:
             tasks.append({
-                'gitlab_issue_id': issue.id,
-                'gitlab_project_id': issue.project_id,
+                'remote_id': issue.id,
                 'title': issue.title,
                 'description': issue.description,
-                'due_date': issue.due_date
+                'due_date': issue.due_date,
+                'status': 'todo',  # todo use labels to determinate status (doing == in_progress)
+                'url': get_gitlab_url(issue)
             })
 
     return tasks
+
+
+def get_gitlab_url(issue):
+    slug = issue.references['full'].replace(issue.references['short'], '')
+    return "https://gitlab.com/{}".format(slug)

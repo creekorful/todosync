@@ -1,3 +1,18 @@
 # Todosync
 
 Synchronize your [Gitlab](https://gitlab.com) issues with [Todoist](https://todoist.com).
+
+Example config file:
+
+```toml
+[config]
+gitlab_token = "" # the token to connect with Gitlab
+todoist_token = "" # the token to connect with Todoist
+database_file = "todosync.db" # where to save the local cache
+
+[sources."https://gitlab.com/creekorful/test"]
+labels = [0] # the optional labels to add to the tasks
+default = 0 # default tasks section
+todo = 0 # where we put tasks with todo status (section)
+in_progress = 0 # where we put tasks with in_progress status (section)
+```

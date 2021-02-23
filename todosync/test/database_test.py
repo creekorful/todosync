@@ -7,8 +7,8 @@ from todosync import database
 class MyTestCase(unittest.TestCase):
     def test_load_save(self):
         tasks = [
-            {'gitlab_issue_id': 1414, 'todoist_item_id': 'abaca111'},
-            {'gitlab_issue_id': 4242, 'todoist_item_id': 'abaca222'},
+            {'remote_id': 1414, 'todoist_item_id': 'abaca111'},
+            {'remote_id': 4242, 'todoist_item_id': 'abaca222'},
         ]
 
         database.save_tasks('test.db', tasks)
