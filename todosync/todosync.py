@@ -85,10 +85,12 @@ def get_config(config: dict, url: str) -> (list[int], int, int):
     return labels, todo, in_progress
 
 
-def synchronize():
+def synchronize(dry_run: bool):
     """
     Main entrypoint of `todosync`
     This perform the synchronization Gitlab <=> Todoist
+
+    :param dry_run: shall we commit & save the changes?
     """
 
     config = toml.load('config.toml')
@@ -150,7 +152,8 @@ def synchronize():
         item = todoist_api.items.add(task['title'], section_id=section_id, labels=labels)
         task['todoist_item_id'] = item['id']
 
-    todoist_api.commit()
+    if not dry_run:
+        todoist_api.commit()
 
-    # update the local database with the tasks refreshed
-    database.save_tasks(config['config']['database_file'], new_tasks, updated_tasks, closed_tasks)
+        # update the local database with the tasks refreshed
+        database.save_tasks(config['config']['database_file'], new_tasks, updated_tasks, closed_tasks)
