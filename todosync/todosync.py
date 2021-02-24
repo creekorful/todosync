@@ -131,10 +131,7 @@ def synchronize(dry_run: bool):
 
         labels, todo, in_progress = get_config(config, task['url'])
 
-        if task['status'] == 'in_progress':
-            section_id = in_progress
-        else:
-            section_id = todo
+        section_id = in_progress if task['status'] == 'in_progress' else todo
 
         todoist_api.items.move(task['todoist_item_id'], section_id=section_id)
 
@@ -144,12 +141,13 @@ def synchronize(dry_run: bool):
 
         labels, todo, in_progress = get_config(config, task['url'])
 
-        if task['status'] == 'in_progress':
-            section_id = in_progress
-        else:
-            section_id = todo
+        section_id = in_progress if task['status'] == 'in_progress' else todo
 
-        item = todoist_api.items.add(task['title'], section_id=section_id, labels=labels)
+        due = {}
+        if task['due_date'] is not None:
+            due = {'date': task['due_date']}
+
+        item = todoist_api.items.add(task['title'], section_id=section_id, labels=labels, due=due)
         task['todoist_item_id'] = item['id']
 
     if not dry_run:
@@ -157,3 +155,5 @@ def synchronize(dry_run: bool):
 
         # update the local database with the tasks refreshed
         database.save_tasks(config['config']['database_file'], new_tasks, updated_tasks, closed_tasks)
+    else:
+        print("[bold yellow]Not synchronizing (--dry-run)[/bold yellow]")
