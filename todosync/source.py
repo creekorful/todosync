@@ -1,10 +1,11 @@
 import gitlab
 
 
-def retrieve_gitlab_issues(token: str) -> list[dict]:
+def retrieve_gitlab_issues(token: str, source_urls: list[str]) -> list[dict]:
     """
     Retrieve the user issues from gitlab.com
     :type token: the Gitlab auth token to identify the user
+    :type source_urls: the list of sources URLs
     :return: list of users opened issues, mapped as tasks
     """
 
@@ -13,13 +14,18 @@ def retrieve_gitlab_issues(token: str) -> list[dict]:
     with gitlab.Gitlab("https://gitlab.com", private_token=token) as gl:
         issues = gl.issues.list(state='opened')
         for issue in issues:
+            url = get_gitlab_url(issue)
+
+            if url not in source_urls:
+                continue
+
             tasks.append({
                 'remote_id': issue.id,
                 'title': issue.title,
                 'description': issue.description,
                 'due_date': issue.due_date,
                 'status': get_gitlab_status(issue),
-                'url': get_gitlab_url(issue)
+                'url': url
             })
 
     return tasks

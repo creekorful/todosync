@@ -99,10 +99,7 @@ def synchronize():
     previous_tasks = database.load_tasks(config['config']['database_file'])
 
     # then retrieve the Gitlab issues
-    gitlab_issues = source.retrieve_gitlab_issues(config['config']['gitlab_token'])
-
-    # keep only the issues we care about
-    gitlab_issues[:] = [issue for issue in gitlab_issues if issue['url'] in sources_url]
+    gitlab_issues = source.retrieve_gitlab_issues(config['config']['gitlab_token'], sources_url)
 
     # compute the new, updated & closed tasks
     new_tasks, updated_tasks, closed_tasks = compute_changes(previous_tasks, gitlab_issues)
