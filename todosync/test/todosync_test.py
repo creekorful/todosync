@@ -12,11 +12,12 @@ class MyTestCase(unittest.TestCase):
 
     def test_compute_changes(self):
         previous = [
-            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo'},
-            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo'}
+            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo', 'kind': 'gitlab'},
+            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo', 'kind': 'gitlab'}
         ]
         current = [
-            {'remote_id': 1, 'status': 'in_progress'}, {'remote_id': 4, 'status': 'todo'}
+            {'remote_id': 1, 'status': 'in_progress', 'kind': 'gitlab'},
+            {'remote_id': 4, 'status': 'todo', 'kind': 'gitlab'}
         ]
 
         new, updated, closed = compute_changes(previous, current)

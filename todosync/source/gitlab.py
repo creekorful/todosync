@@ -1,7 +1,7 @@
 import gitlab
 
 
-def retrieve_gitlab_issues(token: str, source_urls: list[str]) -> list[dict]:
+def retrieve_issues(token: str, source_urls: list[str]) -> list[dict]:
     """
     Retrieve the user issues from gitlab.com
     :type token: the Gitlab auth token to identify the user
@@ -21,11 +21,12 @@ def retrieve_gitlab_issues(token: str, source_urls: list[str]) -> list[dict]:
 
             tasks.append({
                 'remote_id': issue.id,
+                'remote_url': url,
                 'title': issue.title,
                 'description': issue.description,
                 'due_date': issue.due_date,
-                'status': get_gitlab_status(issue),
-                'url': url
+                'status': get_status(issue),
+                'kind': 'gitlab'
             })
 
     return tasks
@@ -36,5 +37,5 @@ def get_gitlab_url(issue) -> str:
     return "https://gitlab.com/{}".format(slug)
 
 
-def get_gitlab_status(issue) -> str:
+def get_status(issue) -> str:
     return 'in_progress' if 'Doing' in issue.labels else 'todo'

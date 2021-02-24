@@ -2,7 +2,8 @@ import todoist
 import toml
 from rich import print
 
-from todosync import database, source
+from todosync import database
+from todosync.source import gitlab
 
 
 def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], list[dict], list[dict]):
@@ -21,12 +22,13 @@ def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], l
     for current_task in current:
         found = False
         for previous_task in previous:
-            if previous_task['remote_id'] == current_task['remote_id']:
+            if previous_task['remote_id'] == current_task['remote_id'] and \
+                    previous_task['kind'] == current_task['kind']:
                 found = True
 
                 if previous_task['status'] != current_task['status']:
-                    current_task['todoist_item_id'] = \
-                        previous_task['todoist_item_id']  # should be returned to update the task
+                    # todoist_item_id should be returned to allow task update
+                    current_task['todoist_item_id'] = previous_task['todoist_item_id']
                     updated_tasks.append(current_task)
 
                 break
@@ -38,7 +40,8 @@ def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], l
     for previous_task in previous:
         found = False
         for current_task in current:
-            if current_task['remote_id'] == previous_task['remote_id']:
+            if current_task['remote_id'] == previous_task['remote_id'] and \
+                    previous_task['kind'] == current_task['kind']:
                 found = True
                 break
 
@@ -100,11 +103,14 @@ def synchronize(dry_run: bool):
     # load previous tasks from the database
     previous_tasks = database.load_tasks(config['config']['database_file'])
 
-    # then retrieve the Gitlab issues
-    gitlab_issues = source.retrieve_gitlab_issues(config['config']['gitlab_token'], sources_url)
+    # then retrieve the remote issues
+    issues = []
+
+    if 'gitlab_token' in config['config']:
+        issues.extend(gitlab.retrieve_issues(config['config']['gitlab_token'], sources_url))
 
     # compute the new, updated & closed tasks
-    new_tasks, updated_tasks, closed_tasks = compute_changes(previous_tasks, gitlab_issues)
+    new_tasks, updated_tasks, closed_tasks = compute_changes(previous_tasks, issues)
 
     if not new_tasks and not updated_tasks and not closed_tasks:
         print("[bold yellow]Nothing to synchronize![/bold yellow]")
@@ -129,7 +135,7 @@ def synchronize(dry_run: bool):
     for task in updated_tasks:
         print("[bold yellow]Updating[/bold yellow] task {} - {}".format(task['todoist_item_id'], task['title']))
 
-        labels, todo, in_progress = get_config(config, task['url'])
+        labels, todo, in_progress = get_config(config, task['remote_url'])
 
         section_id = in_progress if task['status'] == 'in_progress' else todo
 
@@ -139,7 +145,7 @@ def synchronize(dry_run: bool):
     for task in new_tasks:
         print("[bold green]Creating[/bold green] task `{}`".format(task['title']))
 
-        labels, todo, in_progress = get_config(config, task['url'])
+        labels, todo, in_progress = get_config(config, task['remote_url'])
 
         section_id = in_progress if task['status'] == 'in_progress' else todo
 

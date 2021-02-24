@@ -1,6 +1,6 @@
 import unittest
 
-from todosync.source import get_gitlab_url, get_gitlab_status
+from todosync.source import gitlab
 
 
 class MyTestCase(unittest.TestCase):
@@ -13,18 +13,18 @@ class MyTestCase(unittest.TestCase):
             },
         })
 
-        self.assertEqual("https://gitlab.com/creekorful/test", get_gitlab_url(obj))
+        self.assertEqual("https://gitlab.com/creekorful/test", gitlab.get_gitlab_url(obj))
 
     def test_get_gitlab_status(self):
         obj = type('obj', (object,), {
             'labels': [],
         })
-        self.assertEqual("todo", get_gitlab_status(obj))
+        self.assertEqual("todo", gitlab.get_status(obj))
 
         obj = type('obj', (object,), {
             'labels': ['Doing', 'feature'],
         })
-        self.assertEqual("in_progress", get_gitlab_status(obj))
+        self.assertEqual("in_progress", gitlab.get_status(obj))
 
         pass
 
