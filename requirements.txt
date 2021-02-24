@@ -3,3 +3,4 @@ python-gitlab==2.6.0
 rich==9.11.1
 toml==0.10.2
 click==7.1.2
+PyGithub==1.54.1
