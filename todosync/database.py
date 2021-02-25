@@ -16,12 +16,13 @@ def load_tasks(where: str) -> list[dict]:
 
     tasks = []
 
-    for entry in conn.execute("SELECT remote_id, todoist_item_id, status, kind FROM tasks"):
+    for entry in conn.execute("SELECT remote_id, todoist_item_id, title, kind, status FROM tasks"):
         tasks.append({
             'remote_id': entry[0],
             'todoist_item_id': entry[1],
-            'status': entry[2],
-            'kind': entry[3]
+            'title': entry[2],
+            'kind': entry[3],
+            'status': entry[4],
         })
 
     return tasks
@@ -42,8 +43,8 @@ def save_tasks(where: str, new_tasks: list[dict], updated_task: list[dict], clos
     with sqlite3.connect(where) as conn:
         # create new tasks
         for task in new_tasks:
-            conn.execute("INSERT INTO tasks (remote_id, todoist_item_id, status, kind) VALUES (?, ?, ?, ?)",
-                         (task['remote_id'], task['todoist_item_id'], task['status'], task['kind']))
+            conn.execute("INSERT INTO tasks (remote_id, todoist_item_id, title, kind, status) VALUES (?, ?, ?, ?, ?)",
+                         (task['remote_id'], task['todoist_item_id'], task['title'], task['kind'], task['status']))
 
         # update updated tasks
         for task in updated_task:
@@ -64,5 +65,5 @@ def create_database(where: str):
     """
 
     with sqlite3.connect(where) as conn:
-        conn.execute("CREATE TABLE tasks (remote_id integer, todoist_item_id text, kind text, status text)")
+        conn.execute("CREATE TABLE tasks (remote_id integer, todoist_item_id text, title text, kind text, status text)")
         conn.commit()

@@ -118,7 +118,7 @@ def synchronize(dry_run: bool):
         print("[bold yellow]Nothing to synchronize![/bold yellow]")
         return
 
-    print("[bold green]{}[/bold green] new tasks".format(len(new_tasks)))
+    print("[bold green]{}[/bold green] created tasks".format(len(new_tasks)))
     print("[bold yellow]{}[/bold yellow] updated tasks".format(len(updated_tasks)))
     print("[bold red]{}[/bold red] closed tasks".format(len(closed_tasks)))
     print("")
