@@ -1,3 +1,6 @@
 todosync.db
 __pycache__
 config.toml
+build
+dist
+todosync.egg-info
