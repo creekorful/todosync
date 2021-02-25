@@ -1,6 +1,6 @@
 # Todosync
 
-Synchronize your [Gitlab](https://gitlab.com) issues with [Todoist](https://todoist.com).
+Synchronize your [Github](https://github.com) or [Gitlab](https://gitlab.com) issues with [Todoist](https://todoist.com).
 
 Example config file:
 
