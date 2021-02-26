@@ -1,3 +1,7 @@
+import os
+import sys
+from pathlib import Path
+
 import todoist
 import toml
 from rich import print
@@ -88,15 +92,26 @@ def get_config(config: dict, url: str) -> (list[int], int, int):
     return labels, todo, in_progress
 
 
-def synchronize(dry_run: bool):
+def synchronize(dry_run: bool, config_path: str):
     """
     Main entrypoint of `todosync`
     This perform the synchronization Gitlab <=> Todoist
 
     :param dry_run: shall we commit & save the changes?
+    :param config_path: where to find the config file
     """
 
-    config = toml.load('config.toml')
+    if config_path is None:
+        config_path = Path.home().joinpath(".todosync.toml")
+
+    # create config file if not exists
+    if not os.path.exists(config_path):
+        print("[red]Missing config file at `{}`.[/red]".format(config_path))
+        print("[red]See: https://github.com/creekorful/todosync/blob/main/config.toml.example for a config example.["
+              "/red]")
+        sys.exit(1)
+
+    config = toml.load(config_path)
 
     sources_url = config['sources'].keys()
 
