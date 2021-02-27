@@ -48,8 +48,8 @@ def save_tasks(where: str, new_tasks: list[dict], updated_task: list[dict], clos
 
         # update updated tasks
         for task in updated_task:
-            conn.execute("UPDATE tasks SET status = ? WHERE remote_id = ? AND kind = ?",
-                         (task['status'], task['remote_id'], task['kind']))
+            conn.execute("UPDATE tasks SET status = ?, title = ? WHERE remote_id = ? AND kind = ?",
+                         (task['status'], task['title'], task['remote_id'], task['kind']))
 
         # delete closed tasks
         for task in closed_tasks:

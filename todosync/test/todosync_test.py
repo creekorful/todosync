@@ -12,22 +12,29 @@ class MyTestCase(unittest.TestCase):
 
     def test_compute_changes(self):
         previous = [
-            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo', 'kind': 'gitlab'},
-            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo', 'kind': 'gitlab'}
+            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'},
+            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'},
+            {'todoist_item_id': '74', 'remote_id': 3, 'status': 'todo', 'title': 'original title', 'kind': 'github'},
         ]
         current = [
-            {'remote_id': 1, 'status': 'in_progress', 'kind': 'gitlab'},
-            {'remote_id': 4, 'status': 'todo', 'kind': 'gitlab'}
+            {'remote_id': 1, 'status': 'in_progress', 'title': 'original title', 'kind': 'gitlab'},
+            {'remote_id': 3, 'status': 'todo', 'title': 'new title', 'kind': 'github'},
+            {'remote_id': 4, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'}
         ]
 
         new, updated, closed = compute_changes(previous, current)
         self.assertEqual(1, len(new))
-        self.assertEqual(1, len(updated))
+        self.assertEqual(2, len(updated))
         self.assertEqual(1, len(closed))
 
         self.assertEqual(4, new[0]['remote_id'])
+
         self.assertEqual(1, updated[0]['remote_id'])
         self.assertEqual('12', updated[0]['todoist_item_id'])  # should be returned
+
+        self.assertEqual(3, updated[1]['remote_id'])
+        self.assertEqual('74', updated[1]['todoist_item_id'])  # should be returned
+
         self.assertEqual(2, closed[0]['remote_id'])
 
     def test_get_config_url_no_sources(self):
