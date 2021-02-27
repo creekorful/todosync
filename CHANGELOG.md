@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Rework description.
 - Fails if there's no config available.
+- Remove option to specify configuration directory.
 
 ### Fixed
 

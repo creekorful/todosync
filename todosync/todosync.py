@@ -94,19 +94,20 @@ def get_config(config: dict, url: str) -> (list[int], int, int):
     return labels, todo, in_progress
 
 
-def synchronize(dry_run: bool, config_path: str):
+def synchronize(dry_run: bool):
     """
     Main entrypoint of `todosync`
     This perform the synchronization Gitlab <=> Todoist
 
     :param dry_run: shall we commit & save the changes?
-    :param config_path: where to find the config file
     """
 
-    if config_path is None:
-        config_path = Path.home().joinpath(".todosync.toml")
+    config_dir = Path.home().joinpath(".todosync")
 
-    # create config file if not exists
+    config_path = config_dir.joinpath("todosync.toml")
+    database_path = config_dir.joinpath("todosync.db")
+
+    # display error if config file does not exists
     if not os.path.exists(config_path):
         print("[red]Missing config file at `{}`.[/red]".format(config_path))
         print("[red]See: https://github.com/creekorful/todosync/blob/main/config.toml.example for a config example.["
@@ -115,10 +116,16 @@ def synchronize(dry_run: bool, config_path: str):
 
     config = toml.load(config_path)
 
+    # may happens if config file is not configured properly
+    if 'sources' not in config:
+        print("[red]Un-configured config file at `{}`.[/red]".format(config_path))
+        print("[red]Please edit the config file using the editor of your choice.[/red]")
+        sys.exit(1)
+
     sources_url = config['sources'].keys()
 
     # load previous tasks from the database
-    previous_tasks = database.load_tasks(config['config']['database_file'])
+    previous_tasks = database.load_tasks(database_path)
 
     # then retrieve the remote issues
     issues = []
@@ -184,6 +191,6 @@ def synchronize(dry_run: bool, config_path: str):
         todoist_api.commit()
 
         # update the local database with the tasks refreshed
-        database.save_tasks(config['config']['database_file'], new_tasks, updated_tasks, closed_tasks)
+        database.save_tasks(database_path, new_tasks, updated_tasks, closed_tasks)
     else:
         print("[bold yellow]Not synchronizing (--dry-run)[/bold yellow]")

@@ -9,7 +9,6 @@ Example config file:
 gitlab_token = "" # the token to connect with Gitlab
 github_token = "" # the token to connect with Github
 todoist_token = "" # the token to connect with Todoist
-database_file = "todosync.db" # where to save the local cache
 default_labels = [0] # list of labels to apply on ALL tasks
 
 [sources."https://gitlab.com/creekorful/test"]
