@@ -30,11 +30,17 @@ def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], l
                     previous_task['kind'] == current_task['kind']:
                 found = True
 
-                if previous_task['status'] != current_task['status'] or \
-                        previous_task['title'] != current_task['title'] or \
-                        previous_task['due_date'] != current_task['due_date']:
-                    # todoist_item_id should be returned to allow task update
+                changes = {}
+
+                # check for changes
+                keys = ['status', 'title', 'due_date']
+                for key in keys:
+                    if previous_task[key] != current_task[key]:
+                        changes[key] = {'previous': previous_task[key], 'current': current_task[key]}
+
+                if len(changes) > 0:
                     current_task['todoist_item_id'] = previous_task['todoist_item_id']
+                    current_task['changes'] = changes
                     updated_tasks.append(current_task)
 
                 break
@@ -160,6 +166,11 @@ def synchronize(dry_run: bool):
     # update the updated task
     for task in updated_tasks:
         print("[bold yellow]Updating[/bold yellow] task {} - {}".format(task['todoist_item_id'], task['title']))
+
+        # display the incoming changes
+        for (key, value) in task['changes'].items():
+            print("- `{}` {} -> {}".format(key, value['previous'], value['current']))
+        print("")
 
         labels, todo, in_progress = get_config(config, task['remote_url'])
 

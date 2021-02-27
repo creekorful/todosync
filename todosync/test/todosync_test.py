@@ -40,15 +40,19 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(1, updated[0]['remote_id'])
         self.assertEqual('12', updated[0]['todoist_item_id'])  # should be returned
+        self.assertEqual({'status': {'previous': 'todo', 'current': 'in_progress'}}, updated[0]['changes'])
 
         self.assertEqual(3, updated[1]['remote_id'])
         self.assertEqual('74', updated[1]['todoist_item_id'])  # should be returned
+        self.assertEqual({'title': {'previous': 'original title', 'current': 'new title'}}, updated[1]['changes'])
 
         self.assertEqual(33, updated[2]['remote_id'])
         self.assertEqual('7442', updated[2]['todoist_item_id'])  # should be returned
+        self.assertEqual({'due_date': {'previous': '2021-10-05', 'current': None}}, updated[2]['changes'])
 
         self.assertEqual(66, updated[3]['remote_id'])
         self.assertEqual('6666', updated[3]['todoist_item_id'])  # should be returned
+        self.assertEqual({'due_date': {'previous': None, 'current': '2021-06-06'}}, updated[3]['changes'])
 
         self.assertEqual(2, closed[0]['remote_id'])
 

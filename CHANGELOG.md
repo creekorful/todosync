@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add changelog.
 - [#6](https://github.com/creekorful/todosync/issues/6) Allow the update of task title.
 - [#6](https://github.com/creekorful/todosync/issues/6) Allow the update of task due date.
+- [#6](https://github.com/creekorful/todosync/issues/6) Display changes diff.
 
 ### Changed
 
