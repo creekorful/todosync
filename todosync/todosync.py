@@ -146,7 +146,7 @@ def synchronize(dry_run: bool, config_path: str):
     for task in closed_tasks:
         print("[bold red]Closing[/bold red] task {} - {}".format(task['todoist_item_id'], task['title']))
 
-        todoist_api.items.delete(task['todoist_item_id'])
+        todoist_api.items.close(task['todoist_item_id'])
 
     # update the updated task
     for task in updated_tasks:

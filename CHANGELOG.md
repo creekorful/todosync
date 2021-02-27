@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rework description.
 - Fails if there's no config available.
 
+### Fixed
+
+- [#7](https://github.com/creekorful/todosync/issues/7) Close task instead of deleting it.
+
 ## [0.1.2] - 2021-02-26
 
 ### Fixed
