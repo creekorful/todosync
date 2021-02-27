@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="todosync",
-    version="0.1.2",
+    version="0.2.0",
     author="Aloïs Micard",
     author_email="alois@micard.lu",
     description="Synchronize your Git{hub,lab} issues with Todoist.",
