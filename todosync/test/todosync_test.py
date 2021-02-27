@@ -12,19 +12,28 @@ class MyTestCase(unittest.TestCase):
 
     def test_compute_changes(self):
         previous = [
-            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'},
-            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'},
-            {'todoist_item_id': '74', 'remote_id': 3, 'status': 'todo', 'title': 'original title', 'kind': 'github'},
+            {'todoist_item_id': '12', 'remote_id': 1, 'status': 'todo', 'title': 'original title', 'due_date': None,
+             'kind': 'gitlab'},
+            {'todoist_item_id': '42', 'remote_id': 2, 'status': 'todo', 'title': 'original title', 'due_date': None,
+             'kind': 'gitlab'},
+            {'todoist_item_id': '74', 'remote_id': 3, 'status': 'todo', 'title': 'original title', 'due_date': None,
+             'kind': 'github'},
+            {'todoist_item_id': '7442', 'remote_id': 33, 'status': 'todo', 'title': 'original title',
+             'due_date': '2021-10-05', 'kind': 'github'},
+            {'todoist_item_id': '6666', 'remote_id': 66, 'status': 'todo', 'title': 'original title',
+             'due_date': None, 'kind': 'github'},
         ]
         current = [
-            {'remote_id': 1, 'status': 'in_progress', 'title': 'original title', 'kind': 'gitlab'},
-            {'remote_id': 3, 'status': 'todo', 'title': 'new title', 'kind': 'github'},
-            {'remote_id': 4, 'status': 'todo', 'title': 'original title', 'kind': 'gitlab'}
+            {'remote_id': 1, 'status': 'in_progress', 'title': 'original title', 'due_date': None, 'kind': 'gitlab'},
+            {'remote_id': 3, 'status': 'todo', 'title': 'new title', 'due_date': None, 'kind': 'github'},
+            {'remote_id': 4, 'status': 'todo', 'title': 'original title', 'due_date': None, 'kind': 'gitlab'},
+            {'remote_id': 33, 'status': 'todo', 'title': 'original title', 'due_date': None, 'kind': 'github'},
+            {'remote_id': 66, 'status': 'todo', 'title': 'original title', 'due_date': '2021-06-06', 'kind': 'github'},
         ]
 
         new, updated, closed = compute_changes(previous, current)
         self.assertEqual(1, len(new))
-        self.assertEqual(2, len(updated))
+        self.assertEqual(4, len(updated))
         self.assertEqual(1, len(closed))
 
         self.assertEqual(4, new[0]['remote_id'])
@@ -34,6 +43,12 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(3, updated[1]['remote_id'])
         self.assertEqual('74', updated[1]['todoist_item_id'])  # should be returned
+
+        self.assertEqual(33, updated[2]['remote_id'])
+        self.assertEqual('7442', updated[2]['todoist_item_id'])  # should be returned
+
+        self.assertEqual(66, updated[3]['remote_id'])
+        self.assertEqual('6666', updated[3]['todoist_item_id'])  # should be returned
 
         self.assertEqual(2, closed[0]['remote_id'])
 

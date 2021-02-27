@@ -31,7 +31,8 @@ def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], l
                 found = True
 
                 if previous_task['status'] != current_task['status'] or \
-                        previous_task['title'] != current_task['title']:
+                        previous_task['title'] != current_task['title'] or \
+                        previous_task['due_date'] != current_task['due_date']:
                     # todoist_item_id should be returned to allow task update
                     current_task['todoist_item_id'] = previous_task['todoist_item_id']
                     updated_tasks.append(current_task)
@@ -157,8 +158,12 @@ def synchronize(dry_run: bool, config_path: str):
 
         section_id = in_progress if task['status'] == 'in_progress' else todo
 
+        due = {}
+        if task['due_date'] is not None:
+            due = {'date': task['due_date']}
+
         todoist_api.items.move(task['todoist_item_id'], section_id=section_id)
-        todoist_api.items.update(task['todoist_item_id'], content=task['title'])
+        todoist_api.items.update(task['todoist_item_id'], content=task['title'], due=due)
 
     # then create the new tasks
     for task in new_tasks:
