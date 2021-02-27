@@ -1,8 +1,9 @@
 import os
 import sqlite3
+from pathlib import Path
 
 
-def load_tasks(where: str) -> list[dict]:
+def load_tasks(where: Path) -> list[dict]:
     """
     Load tasks from the database
     :param where the emplacement of the database
@@ -29,7 +30,7 @@ def load_tasks(where: str) -> list[dict]:
     return tasks
 
 
-def save_tasks(where: str, new_tasks: list[dict], updated_task: list[dict], closed_tasks: list[dict]):
+def save_tasks(where: Path, new_tasks: list[dict], updated_task: list[dict], closed_tasks: list[dict]):
     """
     Save given tasks to the database
     :param where the emplacement of the database
@@ -72,7 +73,7 @@ def save_tasks(where: str, new_tasks: list[dict], updated_task: list[dict], clos
         conn.commit()
 
 
-def create_database(where: str):
+def create_database(where: Path):
     """
     Create the tables
     """
