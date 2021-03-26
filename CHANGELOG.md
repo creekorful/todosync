@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [#2](https://github.com/creekorful/todosync/issues/2) Add Debian BTS as source.
+
 ## [0.2.0] - 2021-02-27
 
 ### Added
