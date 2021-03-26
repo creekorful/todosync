@@ -7,7 +7,7 @@ import toml
 from rich import print
 
 from todosync import database
-from todosync.source import gitlab, github
+from todosync.source import gitlab, github, bts
 
 
 def compute_changes(previous: list[dict], current: list[dict]) -> (list[dict], list[dict], list[dict]):
@@ -140,6 +140,7 @@ def synchronize(dry_run: bool):
         issues.extend(gitlab.retrieve_issues(config['config']['gitlab_token'], sources_url))
     if 'github_token' in config['config']:
         issues.extend(github.retrieve_issues(config['config']['github_token'], sources_url))
+    issues.extend(bts.retrieve_issues(sources_url))
 
     # compute the new, updated & closed tasks
     new_tasks, updated_tasks, closed_tasks = compute_changes(previous_tasks, issues)

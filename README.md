@@ -1,6 +1,12 @@
 # Todosync
 
-Synchronize your [Github](https://github.com) or [Gitlab](https://gitlab.com) issues with [Todoist](https://todoist.com).
+Synchronize issues & tasks from different sources into [Todoist](https://todoist.com).
+
+## Supported sources
+
+- [Github](https://github.com)
+- [Gitlab](https://gitlab.com)
+- [Debian BTS](https://bugs.debian.org)
 
 Example config file:
 
@@ -18,6 +24,12 @@ todo = 0 # where we put tasks with todo status (section)
 in_progress = 0 # where we put tasks with in_progress status (section)
 
 [sources."https://github.com/creekorful/test"]
+labels = [0] # the optional labels to add to the tasks
+default = 0 # default tasks section
+todo = 0 # where we put tasks with todo status (section)
+in_progress = 0 # where we put tasks with in_progress status (section)
+
+[sources."https://bugs.debian.org/983289"]
 labels = [0] # the optional labels to add to the tasks
 default = 0 # default tasks section
 todo = 0 # where we put tasks with todo status (section)
