@@ -4,3 +4,5 @@ rich==9.11.1
 toml==0.10.2
 click==7.1.2
 PyGithub==1.54.1
+beautifulsoup4==4.9.3
+requests==2.25.1
