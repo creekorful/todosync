@@ -100,15 +100,16 @@ def get_config(config: dict, url: str) -> (list[int], int, int):
     return labels, todo, in_progress
 
 
-def synchronize(dry_run: bool):
+def synchronize(dry_run: bool, config_dir: str):
     """
     Main entrypoint of `todosync`
     This perform the synchronization Gitlab <=> Todoist
 
     :param dry_run: shall we commit & save the changes?
+    :param config_dir: path to the config directory
     """
 
-    config_dir = Path.home().joinpath(".todosync")
+    config_dir = Path(config_dir) if config_dir is not None else Path.home().joinpath(".todosync")
 
     config_path = config_dir.joinpath("todosync.toml")
     database_path = config_dir.joinpath("todosync.db")
