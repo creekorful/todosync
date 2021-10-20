@@ -156,7 +156,8 @@ def synchronize(dry_run: bool, config_dir: str):
     print("")
 
     # instantiate Todoist client
-    todoist_api = todoist.TodoistAPI(config['config']['todoist_token'])
+    todoist_api = todoist.TodoistAPI(token=config['config']['todoist_token'],
+                                     cache=config_dir.joinpath(".todoist-sync"))
     todoist_api.sync()
 
     # close the closed tasks
