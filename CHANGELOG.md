@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.5] - 2021-10-20
+
+### Fixed
+
+- Fix for good .todoist-sync usage (tested).
+
 ## [0.3.4] - 2021-10-20
 
 ### Fixed
@@ -70,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
-[Unreleased]: https://github.com/creekorful/todosync/compare/v0.3.4...HEAD
+[Unreleased]: https://github.com/creekorful/todosync/compare/v0.3.5...HEAD
+[0.3.5]: https://github.com/creekorful/todosync/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/creekorful/todosync/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/creekorful/todosync/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/creekorful/todosync/compare/v0.3.1...v0.3.2
