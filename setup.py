@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.3.0",
     author="Aloïs Micard",
     author_email="alois@micard.lu",
-    description="Synchronize your Git{hub,lab} issues with Todoist.",
+    description="Synchronize issues & tasks from different sources into Todoist.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/creekorful/todosync",
