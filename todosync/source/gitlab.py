@@ -38,4 +38,4 @@ def get_gitlab_url(issue) -> str:
 
 
 def get_status(issue) -> str:
-    return 'in_progress' if 'Doing' in issue.labels else 'todo'
+    return 'in_progress' if issue.assignee is not None else 'todo'

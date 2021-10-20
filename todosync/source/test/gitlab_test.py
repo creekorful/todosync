@@ -17,12 +17,12 @@ class MyTestCase(unittest.TestCase):
 
     def test_get_gitlab_status(self):
         obj = type('obj', (object,), {
-            'labels': [],
+            'assignee': None,
         })
         self.assertEqual("todo", gitlab.get_status(obj))
 
         obj = type('obj', (object,), {
-            'labels': ['Doing', 'feature'],
+            'assignee': {},
         })
         self.assertEqual("in_progress", gitlab.get_status(obj))
 
